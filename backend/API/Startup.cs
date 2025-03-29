@@ -66,10 +66,11 @@ namespace API
                  } );
              } );
 
-            services.AddDbContext<Contexts>( options =>
+          services.AddDbContext<Contexts>(options =>
              {
-                 options.UseSqlServer( Configuration.GetConnectionString( "DefaultConnection" ) );
+    options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
              } );
+
 
             services.AddCors();
 
@@ -96,7 +97,7 @@ namespace API
                 } );
             services.AddAuthorization();
             services.AddScoped<TokenService>();
-            services.AddScoped<ImageService>();
+           // services.AddScoped<ImageService>();
 
         }
 

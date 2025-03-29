@@ -22,13 +22,11 @@ namespace API.Controllers
     {
         private readonly Contexts _context;
         private readonly IMapper _mapper;
-        private readonly ImageService _imageService;
 
-        public ProductsController( Contexts context, IMapper mapper, ImageService imageService )
+        public ProductsController( Contexts context, IMapper mapper )
         {
             _context = context;
             _mapper = mapper;
-            _imageService = imageService;
 
         }
 
@@ -74,17 +72,6 @@ namespace API.Controllers
         {
             var product = _mapper.Map<Product>( productDto );
 
-            if ( productDto.File != null )
-            {
-                var imageResult = await _imageService.AddImageAsync( productDto.File );
-
-                if ( imageResult.Error != null )
-                    return BadRequest( new ProblemDetails { Title = imageResult.Error.Message } );
-
-                product.PictureUrl = imageResult.SecureUrl.ToString();
-                product.PublicId = imageResult.PublicId;
-            }
-
             _context.Products.Add( product );
 
             var result = await _context.SaveChangesAsync() > 0;
@@ -104,20 +91,6 @@ namespace API.Controllers
 
             _mapper.Map( productDto, product );
 
-            if ( productDto.File != null )
-            {
-                var imageResult = await _imageService.AddImageAsync( productDto.File );
-
-                if ( imageResult.Error != null )
-                    return BadRequest( new ProblemDetails { Title = imageResult.Error.Message } );
-
-                if ( !string.IsNullOrEmpty( product.PublicId ) )
-                    await _imageService.DeleteImageAsync( product.PublicId );
-
-                product.PictureUrl = imageResult.SecureUrl.ToString();
-                product.PublicId = imageResult.PublicId;
-            }
-
             var result = await _context.SaveChangesAsync() > 0;
 
             if ( result ) return Ok( product );
@@ -134,7 +107,6 @@ namespace API.Controllers
             if ( product == null ) return NotFound();
 
             if ( !string.IsNullOrEmpty( product.PublicId ) )
-                await _imageService.DeleteImageAsync( product.PublicId );
 
             _context.Products.Remove( product );
 
