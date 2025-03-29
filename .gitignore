@@ -1,12 +1,39 @@
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-!.vscode/*.code-snippets
+# Ignore build outputs
+**/bin/
+**/obj/
 
-# Local History for Visual Studio Code
+# Ignore user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignore Rider/VS Code configs (optional)
+.idea/
+.vscode/
+
+# Ignore local database
+*.db
+*.sqlite
+
+# Ignore EF Core Migrations snapshot (optional)
+Migrations/
+
+# Node/npm junk (if frontend uses Node)
+node_modules/
+dist/
+build/
+
+# Logs
+*.log
+
+# Local history
 .history/
 
-# Built Visual Studio Code Extensions
-*.vsix
+# Ignore temporary files
+*.tmp
+*.temp
+
+# Ignore environment config files
+.env
+.env.*
